@@ -14,13 +14,14 @@ const forecast = (latitude, longitude, callback) => {
         } else if (body.error) {
             callback('Unable to find location', undefined);
         } else {
-            let temperature = body.currently.temperature;
-            temperature = (temperature - 32) * (5 / 9);
+            const temperature = body.currently.temperature;
             const precipProbability = body.currently.precipProbability;
             const summary = body.daily.data[0].summary;
-            callback("undefined", summary + " It is currently " + Math.round(temperature) + " degrees out. There is a " + precipProbability + "% chance of rain.");
+            callback("undefined", summary + " It is currently " + convertToCelcius(temperature) + " degrees out. The high today is " + convertToCelcius(body.daily.data[0].temperatureHigh) + " with a low of " + convertToCelcius(body.daily.data[0].temperatureLow) + " There is a " + precipProbability + "% chance of rain.");
         }
     });
 }
+
+const convertToCelcius = (temperature) => Math.round((temperature - 32) * (5 / 9));
 
 module.exports = forecast;
